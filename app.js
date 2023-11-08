@@ -14,7 +14,7 @@ app.use(bodyParser.json())
 const messages = ["React", "Vue", "Angular"];
 
 
-app.get('/data', (req, res) => {
+app.get('/datagame', (req, res) => {
     res.send(messages);
     
 });
