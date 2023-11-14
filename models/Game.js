@@ -1,22 +1,19 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const gameSchema = new mongoose.Schema({
-    victory: {
-        type: Boolean,
+    Name: {
+        type: String,
         required: true
     },
-    length: {
-        type: Number,
-        required: true
-    },
-    NbrMoove: {
-        type: Number,
+    date: {
+        type: Date,
+        default: Date.now,
         required: true
     }
-    
-});
 
+
+});
 
 const Game = mongoose.model('Game', gameSchema);
 
-module.exports = Game;
+export default Game;
