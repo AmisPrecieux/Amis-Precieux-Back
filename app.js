@@ -1,14 +1,61 @@
-const express = require('express')
-const cors = require('cors')
-const app = express()
-const port = 3000
+import gameRouter from "./router/game.js";
+import partRouter from "./router/part.js";
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+// import db from './connection.js';
+const app = express();
+const port = 3000;
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
-app.use(cors())
+dotenv.config();
 
-app.get('/', (req, res) => {
-    res.send('Hello World !')
-})
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cors());
+app.use(bodyParser.json());
+
+app.use("/api/game/", gameRouter);
+app.use("/api/part/", partRouter);
+
+const uri = "mongodb+srv://AdminPrecieux:"+ process.env.MONGO_PASSWORD +"@amisprecieux.aik1jxt.mongodb.net/?retryWrites=true&w=majority";
+// const connection = mongoose.connect(uri, connectionParams).then(() => console.log('connected')).catch((err) => console.log(err));
+console.log(process.env.MONGO_PASSWORD);
+console.log(uri);
+mongoose.connect(uri)
+  .then(() => {
+  console.log('Connecté à MongoDB');
+  })
+  .catch((error) => {
+  console.error(error);
+  }) 
+
+//récupértion des kpi pour les jeux 
+// app.post('/part', async (req, res) => {
+//     const { victory, length, NbrMoove, idGame } = req.body;
+
+//     const newPart = new Part({
+//         victory: victory,
+//         length: length,
+//         NbrMoove: NbrMoove,
+//         idGame: idGame,
+//         date: new Date()
+//       });
+    
+//     try {
+//         await newPart.save();
+//         res.json(newPart);
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).send(error);
+//     }
+// });
+
+
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
+    console.log(`App in port: ${port}`)
+});
+
+
