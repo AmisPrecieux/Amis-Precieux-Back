@@ -7,6 +7,7 @@ export async function setUser(userBody) {
   userBody.password = await bcrypt.hash(userBody.password, salt);
   userBody.date = new Date();
   userBody.mail = userBody.mail.toLowerCase();
+  userBody.isAdmin = false;
   const newUser = new User(userBody);
   await newUser.save();
 }
