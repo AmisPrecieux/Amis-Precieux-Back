@@ -3,7 +3,7 @@ import { createGame, getGame } from "../services/game.js";
 
 const router = Router();
 
-router.post("/game", async (req, res) => {
+router.post("/", async (req, res) => {
     try {
         await createGame(req.body.Name);
         res.send("Jeux ajouté");
@@ -13,7 +13,7 @@ router.post("/game", async (req, res) => {
 });
 
 
-router.get("/game/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const game = await getGame(req.params.id);
     res.send(game);

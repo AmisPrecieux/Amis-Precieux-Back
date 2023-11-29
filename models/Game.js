@@ -10,8 +10,6 @@ const gameSchema = new mongoose.Schema({
         default: Date.now,
         required: true
     }
-
-
 });
 
 const Game = mongoose.model('Game', gameSchema);

@@ -11,9 +11,7 @@ export async function createGame(Name) {
 }
 
 export async function getGame(idGame) {
-    return await Message.find({
-        idGame: idGame
-    });
+    return await Game.findById(idGame);
 }
 
 

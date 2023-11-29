@@ -27,10 +27,6 @@ authRouter.post("/signin", async (req, res) => {
 
     return res.status(403).send(error.toString());
   }
-})
-
-authRouter.get("/test", verifyToken, (req, res) => {
-  return res.send("ça marche");
-})
+});
 
 export default authRouter;
