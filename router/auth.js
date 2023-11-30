@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { getUser, setUser } from "../services/auth.js";
-import verifyToken from "../middleware/verifyToken.js";
 
 const authRouter = Router();
 
@@ -13,7 +12,7 @@ const authRouter = Router();
 
 /**
  * @swagger
- * /signup:
+ * /api/auth/signup:
  *   post:
  *     summary: Create a new user account
  *     tags: [Authentification]
@@ -52,7 +51,7 @@ authRouter.post("/signup", async (req, res) => {
 
 /**
  * @swagger
- * /signin:
+ * /api/auth/signin:
  *   post:
  *     summary: Sign in with email and password
  *     tags: [Authentification]

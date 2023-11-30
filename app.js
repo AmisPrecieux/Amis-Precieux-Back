@@ -16,8 +16,20 @@ const swaggerOptions = {
       description: 'API documentation for Amis Precieux',
       servers: ['http://localhost:3000'],
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT', // or your token format
+        },
+      },
+    },
+    security: [{
+      bearerAuth: [],
+    }],
   },
-  apis: ['./router/*.js'], // Path to the API routes
+  apis: ['./router/*.js'],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
@@ -49,6 +61,15 @@ mongoose.connect(uri)
   }) 
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+// Middleware to include Authorization header with bearer token
+app.use((req, res, next) => {
+  const bearerToken = req.headers.authorization;
+  if (bearerToken) {
+    req.headers.authorization = bearerToken;
+  }
+  next();
+});
 
 app.listen(port, () => {
     console.log(`App in port: ${port}`)
