@@ -10,7 +10,15 @@ const gameSchema = new mongoose.Schema({
         default: Date.now,
         required: true
     },
-    image : {
+    image1 : {
+        type: Buffer,
+        required: false
+    },
+    image2 : {
+        type: Buffer,
+        required: false
+    },
+    image3 : {
         type: Buffer,
         required: false
     },

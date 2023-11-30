@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createGame, getGame, updateGameImage } from "../services/game.js";
+import { createGame, getGame, updateGameImage1, updateGameImage2, updateGameImage3 } from "../services/game.js";
 import multer from "multer";
 import mongoose from "mongoose";
 import { log } from "console";
@@ -11,6 +11,8 @@ const storage = multer.memoryStorage();
 
 const upload = multer({ storage: storage });
 
+
+//Create a new game
 router.post("/", verifyToken, async (req, res) => {
   try {
     const Name = req.body.Name;
@@ -23,17 +25,59 @@ router.post("/", verifyToken, async (req, res) => {
 });
 
 
-router.put("/image/:id", verifyToken, upload.single('image'), async (req, res) => {
+//Update a game image
+router.put("/image1/:id", verifyToken, upload.single('image'), async (req, res) => {
   try {
     const gameId = req.params.id;
     const game = await getGame(gameId);
     if (!game) {
       return res.status(404).send("Game not found");
     }
-    log(req.file.buffer);
-
-    await updateGameImage(gameId, req.file.buffer);
-    res.send("Game image updated successfully");
+    if (req.file) {
+      log(req.file.buffer);
+      await updateGameImage1(gameId, req.file.buffer);
+      res.send("Game image updated successfully");
+    } else {
+      res.send("No image provided");
+    }
+  } catch (error) {
+    res.status(400).send(error);
+    console.log(error);
+  }
+});
+router.put("/image2/:id", verifyToken, upload.single('image'), async (req, res) => {
+  try {
+    const gameId = req.params.id;
+    const game = await getGame(gameId);
+    if (!game) {
+      return res.status(404).send("Game not found");
+    }
+    if (req.file) {
+      log(req.file.buffer);
+      await updateGameImage2(gameId, req.file.buffer);
+      res.send("Game image updated successfully");
+    } else {
+      res.send("No image provided");
+    }
+  } catch (error) {
+    res.status(400).send(error);
+    console.log(error);
+  }
+});
+router.put("/image3/:id", verifyToken, upload.single('image'), async (req, res) => {
+  try {
+    const gameId = req.params.id;
+    const game = await getGame(gameId);
+    if (!game) {
+      return res.status(404).send("Game not found");
+    }
+    if (req.file) {
+      log(req.file.buffer);
+      await updateGameImage3(gameId, req.file.buffer);
+      res.send("Game image updated successfully");
+    } else {
+      res.send("No image provided");
+    }
   } catch (error) {
     res.status(400).send(error);
     console.log(error);
@@ -41,6 +85,7 @@ router.put("/image/:id", verifyToken, upload.single('image'), async (req, res) =
 });
 
 
+//Get a game
 router.get("/:id",verifyToken, async (req, res) => {
   try {
     const game = await getGame(req.params.id);
