@@ -3,6 +3,7 @@ import { createGame, getGame, updateGameImage1, updateGameImage2, updateGameImag
 import multer from "multer";
 import mongoose from "mongoose";
 import { log } from "console";
+import { createGame, getGame } from "../services/game.js";
 import verifyToken from "../middleware/verifyToken.js";
 
 const router = Router();
@@ -12,6 +13,41 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 
+
+/**
+ * @swagger
+ * tags:
+ *   name: Game
+ *   description: API endpoints for managing games
+ * security:
+ *   - bearerAuth: []
+ */
+
+/**
+ * @swagger
+ * /api/game:
+ *   post:
+ *     summary: Create a new game
+ *     tags: [Game]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               Name:
+ *                 type: string
+ *             example:
+ *               Name: My Game
+ *     responses:
+ *       200:
+ *         description: Game created successfully
+ *       400:
+ *         description: Error occurred while creating the game
+ */
 //Create a new game
 router.post("/", verifyToken, async (req, res) => {
   try {
@@ -85,8 +121,29 @@ router.put("/image3/:id", verifyToken, upload.single('image'), async (req, res) 
 });
 
 
+/**
+ * @swagger
+ * /api/game/{id}:
+ *   get:
+ *     summary: Get a game by ID
+ *     tags: [Game]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the game
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Game found successfully
+ *       400:
+ *         description: Error occurred while getting the game
+ */
 //Get a game
-router.get("/:id",verifyToken, async (req, res) => {
+router.get("/:id", verifyToken, async (req, res) => {
   try {
     const game = await getGame(req.params.id);
     res.send(game);

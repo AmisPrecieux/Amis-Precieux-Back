@@ -4,7 +4,36 @@ import authRouter from "./router/auth.js";
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-// import db from './connection.js';
+import swaggerJsDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
+
+// Swagger options
+const swaggerOptions = {
+  swaggerDefinition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Amis Precieux API',
+      description: 'API documentation for Amis Precieux',
+      servers: ['http://localhost:3000'],
+    },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT', // or your token format
+        },
+      },
+    },
+    security: [{
+      bearerAuth: [],
+    }],
+  },
+  apis: ['./router/*.js'],
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+
 const app = express();
 const port = 3000;
 import mongoose from 'mongoose';
@@ -30,6 +59,17 @@ mongoose.connect(uri)
   .catch((error) => {
   console.error(error);
   }) 
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+// Middleware to include Authorization header with bearer token
+app.use((req, res, next) => {
+  const bearerToken = req.headers.authorization;
+  if (bearerToken) {
+    req.headers.authorization = bearerToken;
+  }
+  next();
+});
 
 app.listen(port, () => {
     console.log(`App in port: ${port}`)
