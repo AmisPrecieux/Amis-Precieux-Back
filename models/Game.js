@@ -9,7 +9,13 @@ const gameSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
         required: true
-    }
+    },
+    image : {
+        type: Buffer,
+        required: false
+    },
+
+
 });
 
 const Game = mongoose.model('Game', gameSchema);
