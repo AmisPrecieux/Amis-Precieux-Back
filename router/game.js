@@ -3,7 +3,6 @@ import { createGame, getGame, updateGameImage1, updateGameImage2, updateGameImag
 import multer from "multer";
 import mongoose from "mongoose";
 import { log } from "console";
-import { createGame, getGame } from "../services/game.js";
 import verifyToken from "../middleware/verifyToken.js";
 
 const router = Router();

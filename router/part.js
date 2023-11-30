@@ -1,8 +1,6 @@
 import { Router } from "express";
 import { createPart } from "../services/part.js";
 import verifyToken from "../middleware/verifyToken.js";
-import { createPart, getParts } from "../services/part.js";
-import verifyToken from "../middleware/verifyToken.js";
 
 
 const router = Router();
