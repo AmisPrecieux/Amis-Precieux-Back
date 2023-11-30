@@ -1,8 +1,10 @@
 import { Router } from "express";
-import { createPart, getParts } from "../services/part.js";
+import { createPart } from "../services/part.js";
 import verifyToken from "../middleware/verifyToken.js";
 
+
 const router = Router();
+
 
 
 /**
@@ -44,11 +46,11 @@ const router = Router();
 
 router.post("/", verifyToken, async (req, res) => {
   try {
-    await createPart(req.body.victory, req.body.length, req.body.NbrMoove, req.body.IdGame);
-    res.send("Partie ajoutée");
-  } catch (error) {
-    res.status(400).send(error);
-  }
+      await createPart(req.body.victory, req.body.length, req.body.NbrMoove, req.body.IdGame);
+      res.send("Partie ajouté");
+    } catch (error) {
+      res.status(400).send(error);
+    }
 });
 
 /**
