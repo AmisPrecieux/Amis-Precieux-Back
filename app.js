@@ -4,7 +4,24 @@ import authRouter from "./router/auth.js";
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-// import db from './connection.js';
+import swaggerJsDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
+
+// Swagger options
+const swaggerOptions = {
+  swaggerDefinition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Amis Precieux API',
+      description: 'API documentation for Amis Precieux',
+      servers: ['http://localhost:3000'],
+    },
+  },
+  apis: ['./router/*.js'], // Path to the API routes
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+
 const app = express();
 const port = 3000;
 import mongoose from 'mongoose';
@@ -30,6 +47,8 @@ mongoose.connect(uri)
   .catch((error) => {
   console.error(error);
   }) 
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.listen(port, () => {
     console.log(`App in port: ${port}`)

@@ -1,5 +1,6 @@
 import Part from '../models/Part.js';
 
+
 export async function createPart(victory, length, NbrMoove, idGame) {
     const newPart = new Part({
         victory: victory,
