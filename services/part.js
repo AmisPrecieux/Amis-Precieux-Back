@@ -8,9 +8,14 @@ export async function createPart(victory, length, NbrMoove, idGame) {
         game: idGame,
         date: new Date()
     });
-    console.log(newPart),
+    console.log(newPart);
 
     await newPart.save();
+}
+
+export async function getParts() {
+    const parts = await Part.find();
+    return parts;
 }
 
 
