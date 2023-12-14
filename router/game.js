@@ -30,8 +30,14 @@ const router = Router();
  *             properties:
  *               Name:
  *                 type: string
+ *               Description:
+ *                 type: string
+ *               Difficulty:
+ *                 type: Number
  *             example:
  *               Name: My Game
+ *               Description: This is a game
+ *               Difficulty: 3
  *     responses:
  *       200:
  *         description: Game created successfully
@@ -40,7 +46,7 @@ const router = Router();
  */
 router.post("/", async (req, res) => {
   try {
-    await createGame(req.body.Name);
+    await createGame(req.body.Name, req.body.Description, req.body.Difficulty);
     res.send("Jeux ajouté");
   } catch (error) {
     res.status(400).send(error);

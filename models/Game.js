@@ -5,6 +5,14 @@ const gameSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    Description: {
+        type: String,
+        required: true
+    },
+    Difficulty: {
+        type: Number,
+        required: true
+    },
     date: {
         type: Date,
         default: Date.now,
