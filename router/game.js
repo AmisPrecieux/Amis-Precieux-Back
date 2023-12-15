@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createGame, getGame } from "../services/game.js";
+import { createGame, getGame, getAllGames } from "../services/game.js";
 import verifyToken from "../middleware/verifyToken.js";
 
 const router = Router();
@@ -12,6 +12,8 @@ const router = Router();
  * security:
  *   - bearerAuth: []
  */
+
+
 
 /**
  * @swagger
@@ -78,6 +80,29 @@ router.get("/:id", verifyToken, async (req, res) => {
   try {
     const game = await getGame(req.params.id);
     res.send(game);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+/**
+ * @swagger
+ * /api/game:
+ *   get:
+ *     summary: Get all games
+ *     tags: [Game]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Games retrieved successfully
+ *       400:
+ *         description: Error occurred while getting the games
+ */
+router.get("/", verifyToken, async (req, res) => {
+  try {
+    const games = await getAllGames();
+    res.send(games);
   } catch (error) {
     res.status(400).send(error);
   }
