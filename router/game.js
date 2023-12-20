@@ -13,8 +13,6 @@ const router = Router();
  *   - bearerAuth: []
  */
 
-
-
 /**
  * @swagger
  * /api/game:
@@ -46,7 +44,7 @@ const router = Router();
  *       400:
  *         description: Error occurred while creating the game
  */
-router.post("/", async (req, res) => {
+router.post("/", verifyToken, async (req, res) => {
   try {
     await createGame(req.body.Name, req.body.Description, req.body.Difficulty);
     res.send("Jeux ajouté");
@@ -76,7 +74,7 @@ router.post("/", async (req, res) => {
  *       400:
  *         description: Error occurred while getting the game
  */
-router.get("/:id", verifyToken, async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const game = await getGame(req.params.id);
     res.send(game);
@@ -99,7 +97,7 @@ router.get("/:id", verifyToken, async (req, res) => {
  *       400:
  *         description: Error occurred while getting the games
  */
-router.get("/", verifyToken, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const games = await getAllGames();
     res.send(games);
