@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { getUser, setUser } from "../services/auth.js";
+import { getUser, setUser, deleteUser } from "../services/auth.js";
+import verifyToken from "../middleware/verifyToken.js";
 
 const authRouter = Router();
 
@@ -7,7 +8,7 @@ const authRouter = Router();
  * @swagger
  * tags:
  *   name: Authentification
- *   description: API endpoints for managing sign up and sign in
+ *   description: API endpoints for managing sign up, sign in, and account deletion
  */
 
 /**
@@ -77,6 +78,37 @@ authRouter.post("/signin", async (req, res) => {
   try {
     const token = await getUser(req.body);
     return res.status(201).send(token);
+  } catch (error) {
+    return res.status(403).send(error.toString());
+  }
+});
+
+/**
+ * @swagger
+ * /api/auth/delete:
+ *   delete:
+ *     summary: Delete user account
+ *     tags: [Authentification]
+ *     description: Deletes the user account associated with the provided id.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Account deleted successfully
+ *       403:
+ *         description: Forbidden - error occurred while deleting the account
+ */
+authRouter.delete("/delete", verifyToken, async (req, res) => {
+  try {
+    await deleteUser(req.body.id);
+    return res.status(200).send("Compte supprimé");
   } catch (error) {
     return res.status(403).send(error.toString());
   }
