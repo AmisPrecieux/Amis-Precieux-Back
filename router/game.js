@@ -142,7 +142,7 @@ router.put("/image3/:id", verifyToken, upload.single('image'), async (req, res) 
  *         description: Error occurred while getting the game
  */
 //Get a game
-router.get("/:id", verifyToken, async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const game = await getGame(req.params.id);
     res.send(game);
@@ -150,7 +150,8 @@ router.get("/:id", verifyToken, async (req, res) => {
     res.status(400).send(error);
   }
 });
-router.get("/image/:id",verifyToken, async (req, res) => {
+
+router.get("/image/:id", async (req, res) => {
   try {
     const gameId = req.params.id;
     const game = await getGame(gameId);

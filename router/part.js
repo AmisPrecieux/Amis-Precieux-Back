@@ -44,7 +44,7 @@ const router = Router();
  *         description: Error occurred while adding part
  */
 
-router.post("/", verifyToken, async (req, res) => {
+router.post("/", async (req, res) => {
   try {
       await createPart(req.body.victory, req.body.length, req.body.NbrMoove, req.body.IdGame);
       res.send("Partie ajouté");
