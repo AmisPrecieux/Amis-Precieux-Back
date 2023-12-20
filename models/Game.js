@@ -5,6 +5,14 @@ const gameSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    Description: {
+        type: String,
+        required: true
+    },
+    Difficulty: {
+        type: Number,
+        required: true
+    },
     date: {
         type: Date,
         default: Date.now,
@@ -19,6 +27,14 @@ const gameSchema = new mongoose.Schema({
         required: false
     },
     image3 : {
+        type: Buffer,
+        required: false
+    },
+    image4 : {
+        type: Buffer,
+        required: false
+    },
+    image5 : {
         type: Buffer,
         required: false
     },

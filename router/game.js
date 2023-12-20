@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createGame, getGame, updateGameImage1, updateGameImage2, updateGameImage3 } from "../services/game.js";
+import { createGame, getGame, updateGameImage1, updateGameImage2, updateGameImage3, getAllGames } from "../services/game.js";
 import multer from "multer";
 import mongoose from "mongoose";
 import { log } from "console";
@@ -39,21 +39,24 @@ const upload = multer({ storage: storage });
  *             properties:
  *               Name:
  *                 type: string
+ *               Description:
+ *                 type: string
+ *               Difficulty:
+ *                 type: Number
  *             example:
  *               Name: My Game
+ *               Description: This is a game
+ *               Difficulty: 3
  *     responses:
  *       200:
  *         description: Game created successfully
  *       400:
  *         description: Error occurred while creating the game
  */
-//Create a new game
 router.post("/", verifyToken, async (req, res) => {
   try {
-    const Name = req.body.Name;
-    const img = req.body.img;
-    await createGame(Name, img);
-    res.send("Game created successfully");
+    await createGame(req.body.Name, req.body.Description, req.body.Difficulty);
+    res.send("Jeux ajouté");
   } catch (error) {
     res.status(400).send(error);
   }
@@ -118,6 +121,45 @@ router.put("/image3/:id", verifyToken, upload.single('image'), async (req, res) 
     console.log(error);
   }
 });
+router.put("/image4/:id", verifyToken, upload.single('image'), async (req, res) => {
+  try {
+    const gameId = req.params.id;
+    const game = await getGame(gameId);
+    if (!game) {
+      return res.status(404).send("Game not found");
+    }
+    if (req.file) {
+      log(req.file.buffer);
+      await updateGameImage4(gameId, req.file.buffer);
+      res.send("Game image updated successfully");
+    } else {
+      res.send("No image provided");
+    }
+  } catch (error) {
+    res.status(400).send(error);
+    console.log(error);
+  }
+});
+router.put("/image5/:id", verifyToken, upload.single('image'), async (req, res) => {
+  try {
+    const gameId = req.params.id;
+    const game = await getGame(gameId);
+    if (!game) {
+      return res.status(404).send("Game not found");
+    }
+    if (req.file) {
+      log(req.file.buffer);
+      await updateGameImage5(gameId, req.file.buffer);
+      res.send("Game image updated successfully");
+    } else {
+      res.send("No image provided");
+    }
+  } catch (error) {
+    res.status(400).send(error);
+    console.log(error);
+  }
+});
+
 
 
 /**
@@ -151,6 +193,28 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/game:
+ *   get:
+ *     summary: Get all games
+ *     tags: [Game]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Games retrieved successfully
+ *       400:
+ *         description: Error occurred while getting the games
+ */
+router.get("/", async (req, res) => {
+  try {
+    const games = await getAllGames();
+    res.send(games);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
 router.get("/image/:id", async (req, res) => {
   try {
     const gameId = req.params.id;
