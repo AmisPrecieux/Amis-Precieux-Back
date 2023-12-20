@@ -9,6 +9,8 @@ export async function createGame(Name, Description, Difficulty) {
         image1: null,
         image2: null,
         image3: null,
+        image4: null,
+        image5: null,
     });
     await newGame.save();
 }
@@ -35,6 +37,16 @@ export async function updateGameImage2(idGame, newImg) {
 export async function updateGameImage3(idGame, newImg) {
     const game = await Game.findById(idGame);
     game.image3 = newImg;
+    await game.save();
+}
+export async function updateGameImage4(idGame, newImg) {
+    const game = await Game.findById(idGame);
+    game.image4 = newImg;
+    await game.save();
+}
+export async function updateGameImage5(idGame, newImg) {
+    const game = await Game.findById(idGame);
+    game.image5 = newImg;
     await game.save();
 }
 

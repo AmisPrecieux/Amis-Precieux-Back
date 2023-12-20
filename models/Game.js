@@ -30,6 +30,14 @@ const gameSchema = new mongoose.Schema({
         type: Buffer,
         required: false
     },
+    image4 : {
+        type: Buffer,
+        required: false
+    },
+    image5 : {
+        type: Buffer,
+        required: false
+    },
 
 
 });
