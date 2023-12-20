@@ -12,8 +12,6 @@ export async function setUser(userBody) {
   await newUser.save();
 }
 
-
-
 export async function getUser(userBody) {
   const user = await User.findOne({
     mail: userBody.mail,
@@ -38,6 +36,10 @@ export async function getUser(userBody) {
 
   return {
     access_token: access_token,
-    
   };
 }
+
+export async function deleteUser(userId) {
+  await User.findByIdAndDelete(userId);
+}
+
