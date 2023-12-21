@@ -5,6 +5,7 @@ services:
       - mongo
     networks:
       - amis-precieux-back # Connecte ce service au réseau "tp-docker-back"
+      - traefik-network
     container_name: back-prod
     image: back:prod
     build:
