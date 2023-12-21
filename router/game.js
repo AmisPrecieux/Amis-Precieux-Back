@@ -225,10 +225,10 @@ router.get("/image/:id", async (req, res) => {
     if (!game) {
       return res.status(404).send("Game not found");
     }
-    const imageBuffer = game.image;
-    const base64Image = Buffer.from(imageBuffer).toString("base64");
-    const imageSrc = `data:image/jpeg;base64,${base64Image}`;
-    res.send(`<img src="${imageSrc}" alt="Game Image">`);
+    console.log(req.params.id);
+    const images = await getGameImages(req.params.id);
+    console.log(images);
+    res.send(`<img src="${images[0].src}" alt="Game Image">`);
   } catch (error) {
     res.status(400).send(error);
   }

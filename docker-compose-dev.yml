@@ -1,0 +1,36 @@
+version: "3.9"
+services:
+  back-dev:
+    depends_on:
+      - mongo
+    networks:
+      - amis-precieux-back # Connecte ce service au réseau "tp-docker-back"
+    container_name: back-dev
+    image: back:dev
+    build:
+      context: .
+      target: dev
+      dockerfile: Dockerfile
+    volumes:
+      - .:/develop # Volume partagé répertoire local dans le conteneur
+
+    ports:
+      - 3000:3000 # Mappage du port hôte/conteneur.
+    tty: true # Alloue un terminal TTY pour ce service.
+
+  mongo:
+    networks:
+      - amis-precieux-back
+    image: mongodb/mongodb-community-server:latest
+    ports:
+      - "27017:27017" # Mappage du port hôte/conteneur.
+    volumes:
+      - mongo-dev-data:/data/db # Volume persistante pour les données de MongoDB.
+
+# Définition du volume pour les données MongoDB.
+volumes:
+  mongo-dev-data:
+
+# Définition du réseaux
+networks:
+    amis-precieux-back:
