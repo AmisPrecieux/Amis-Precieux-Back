@@ -11,6 +11,7 @@ export async function createGame(Name, Description, Difficulty) {
         image3: null,
         image4: null,
         image5: null,
+        slug: Name.toLowerCase().replace(/ /g, '-')
     });
     await newGame.save();
 }

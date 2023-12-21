@@ -43,6 +43,9 @@ const upload = multer({ storage: storage });
  *                 type: string
  *               Difficulty:
  *                 type: Number
+ *               Slug:
+ *                 type: string
+ *                 required:
  *             example:
  *               Name: My Game
  *               Description: This is a game
@@ -55,7 +58,7 @@ const upload = multer({ storage: storage });
  */
 router.post("/", verifyToken, async (req, res) => {
   try {
-    await createGame(req.body.Name, req.body.Description, req.body.Difficulty);
+    await createGame(req.body.Name, req.body.Description, req.body.Difficulty, req.body.Slug);
     res.send("Jeux ajouté");
   } catch (error) {
     res.status(400).send(error);

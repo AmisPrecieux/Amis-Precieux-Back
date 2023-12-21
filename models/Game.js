@@ -38,7 +38,10 @@ const gameSchema = new mongoose.Schema({
         type: Buffer,
         required: false
     },
-
+    slug : {
+        type: String,
+        required: true
+    }
 
 });
 
