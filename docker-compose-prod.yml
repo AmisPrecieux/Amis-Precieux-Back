@@ -34,6 +34,6 @@ volumes:
 
 # Définition du réseaux
 networks:
-    amis-precieux-back:
-    traefik-network:
+  amis-precieux-back:
+  traefik-network:
     external: true
