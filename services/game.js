@@ -49,5 +49,21 @@ export async function updateGameImage5(idGame, newImg) {
     game.image5 = newImg;
     await game.save();
 }
+export async function getGameImages(idGame) {
+    const game = await Game.findById(idGame);
+    return {
+        image1: convertToImage(game.image1),
+        image2: convertToImage(game.image2),
+        image3: convertToImage(game.image3),
+        image4: convertToImage(game.image4),
+        image5: convertToImage(game.image5),
+        
+    };
+}
+async function convertToImage(imageData) {
+    const imageBuffer = Buffer.from(imageData, 'base64');
+    console.log(imageBuffer);
+    return imageBuffer;
+}
 
 
