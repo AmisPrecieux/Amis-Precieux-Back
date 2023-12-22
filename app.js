@@ -52,7 +52,8 @@ app.use("/api/game/", gameRouter);
 app.use("/api/part/", partRouter);
 app.use("/api/auth/", authRouter);
 
-const uri = `mongodb://mongo`;
+// const uri = `mongodb://mongo`;
+const uri = "mongodb+srv://AdminPrecieux:iqwr5XL7PKnSFG9@amisprecieux.aik1jxt.mongodb.net/?retryWrites=true&w=majority";
 console.log(uri);
 // const connection = mongoose.connect(uri, connectionParams).then(() => console.log('connected')).catch((err) => console.log(err));
 mongoose

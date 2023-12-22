@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { createGame, getGame, getAllGames, deleteGame } from "../services/game.js";
 import multer from "multer";
-import mongoose from "mongoose";
 import { log } from "console";
 import verifyToken from "../middleware/verifyToken.js";
 
@@ -65,6 +64,24 @@ router.post("/", verifyToken, async (req, res) => {
     res.status(400).send(error);
   }
 });
+
+router.put("/update/:id", verifyToken, async (req, res) => {
+  try {
+    const gameId = req.params.id;
+    const game = await getGame(gameId);
+    if (!game) {
+      return res.status(404).send("Game not foundaaaa");
+    }
+    await updateGame(gameId, req.body.Name, req.body.Description, req.body.Difficulty,  req.body.image1,  req.body.image2, req.body.image3, req.body.image4, req.body.image5,req.body.Slug);
+    res.send("Game updated successfully");
+  } catch (error) {
+    res.status(400).send(error);
+    console.log(error);
+  }});
+
+
+
+
 
 /**
  * @swagger
