@@ -19,23 +19,23 @@ const gameSchema = new mongoose.Schema({
         required: true
     },
     image1 : {
-        type: Buffer,
+        type: String,
         required: false
     },
     image2 : {
-        type: Buffer,
+        type: String,
         required: false
     },
     image3 : {
-        type: Buffer,
+        type: String,
         required: false
     },
     image4 : {
-        type: Buffer,
+        type: String,
         required: false
     },
     image5 : {
-        type: Buffer,
+        type: String,
         required: false
     },
     slug : {
