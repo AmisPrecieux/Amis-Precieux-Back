@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createGame, getGame, updateGameImage1, updateGameImage2, updateGameImage3, getAllGames, deleteGame, updateGame } from "../services/game.js";
+import { createGame, getGame, updateGameImage1, updateGameImage2, updateGameImage3, getAllGames, deleteGame } from "../services/game.js";
 import multer from "multer";
 import mongoose from "mongoose";
 import { log } from "console";
