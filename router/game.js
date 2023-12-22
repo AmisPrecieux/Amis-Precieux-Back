@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createGame, getGame, getAllGames, deleteGame } from "../services/game.js";
+import { createGame, getGame, getAllGames, deleteGame, updateGame } from "../services/game.js";
 import multer from "multer";
 import { log } from "console";
 import verifyToken from "../middleware/verifyToken.js";
