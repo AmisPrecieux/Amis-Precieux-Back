@@ -50,6 +50,7 @@ const upload = multer({ storage: storage });
  *               Name: My Game
  *               Description: This is a game
  *               Difficulty: 3
+ *               Slug: my-game
  *     responses:
  *       200:
  *         description: Game created successfully
