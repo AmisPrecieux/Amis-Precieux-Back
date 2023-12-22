@@ -1,43 +1,45 @@
 import gameRouter from "./router/game.js";
 import partRouter from "./router/part.js";
 import authRouter from "./router/auth.js";
-import express from 'express';
-import cors from 'cors';
-import bodyParser from 'body-parser';
-import swaggerJsDoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
+import swaggerJsDoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
 
 // Swagger options
 const swaggerOptions = {
   swaggerDefinition: {
-    openapi: '3.0.0',
+    openapi: "3.0.0",
     info: {
-      title: 'Amis Precieux API',
-      description: 'API documentation for Amis Precieux',
-      servers: ['http://localhost:3000'],
+      title: "Amis Precieux API",
+      description: "API documentation for Amis Precieux",
+      servers: ["http://localhost:3000"],
     },
     components: {
       securitySchemes: {
         bearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT', // or your token format
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT", // or your token format
         },
       },
     },
-    security: [{
-      bearerAuth: [],
-    }],
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
   },
-  apis: ['./router/*.js'],
+  apis: ["./router/*.js"],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
 const app = express();
 const port = 3000;
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -53,15 +55,18 @@ app.use("/api/auth/", authRouter);
 const uri = `mongodb://mongo`;
 console.log(uri);
 // const connection = mongoose.connect(uri, connectionParams).then(() => console.log('connected')).catch((err) => console.log(err));
-mongoose.connect(uri)
+mongoose
+  .connect(uri)
   .then(() => {
-  console.log('Connecté à MongoDB');
+    console.log("Connecté à MongoDB");
   })
   .catch((error) => {
-  console.error(error);
-  }) 
+    console.error(error);
+  });
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+if (process.env.NODE_ENV === "development") {
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+}
 
 // Middleware to include Authorization header with bearer token
 app.use((req, res, next) => {
@@ -73,7 +78,5 @@ app.use((req, res, next) => {
 });
 
 app.listen(port, () => {
-    console.log(`App in port: ${port}`)
+  console.log(`App in port: ${port}`);
 });
-
-
