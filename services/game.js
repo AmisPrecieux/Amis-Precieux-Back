@@ -67,4 +67,23 @@ async function convertToImage(imageData) {
     return imageBuffer;
 }
 
+export async function updateGame(idGame, Name, Description, Difficulty, Slug, image1, image2, image3, image4, image5) {
+    const game = await Game.findById(idGame);
+    game.Name = Name;
+    game.Description = Description;
+    game.Difficulty = Difficulty;
+    game.Slug = Slug;
+    game.image1 = image1;
+    game.image2 = image2;
+    game.image3 = image3;
+    game.image4 = image4;
+    game.image5 = image5;
+    await game.save();
+}
+
+export async function deleteGame(idGame) {
+    console.log(typeof idGame);
+    await Game.findByIdAndDelete(idGame);
+}
+
 

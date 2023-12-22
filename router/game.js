@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createGame, getGame, updateGameImage1, updateGameImage2, updateGameImage3, getAllGames } from "../services/game.js";
+import { createGame, getGame, updateGameImage1, updateGameImage2, updateGameImage3, getAllGames, deleteGame, updateGame } from "../services/game.js";
 import multer from "multer";
 import mongoose from "mongoose";
 import { log } from "console";
@@ -230,6 +230,37 @@ router.get("/image/:id", async (req, res) => {
     const images = await getGameImages(req.params.id);
     console.log(images);
     res.send(`<img src="${images[0].src}" alt="Game Image">`);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+/**
+ * @swagger
+ * /api/game/{id}:
+ *   delete:
+ *     summary: Delete a game by ID
+ *     tags: [Game]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the game
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Game deleted successfully
+ *       400:
+ *         description: Error occurred while deleting the game
+ */
+router.delete("/:id", verifyToken, async (req, res) => {
+  try {
+    const gameId = req.params.id;
+    await deleteGame(gameId);
+    res.send("Game deleted successfully");
   } catch (error) {
     res.status(400).send(error);
   }
