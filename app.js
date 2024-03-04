@@ -14,7 +14,7 @@ const swaggerOptions = {
     info: {
       title: "Amis Precieux API",
       description: "API documentation for Amis Precieux",
-      servers: ["http://localhost:3000"],
+      servers: ["https://api.amisprecieux.fr/api"],
     },
     components: {
       securitySchemes: {
