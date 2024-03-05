@@ -9,7 +9,7 @@ const partSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    NbrMoove: {
+    nbrMoves: {
         type: Number,
         required: true
     },
