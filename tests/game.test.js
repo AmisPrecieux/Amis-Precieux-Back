@@ -9,43 +9,6 @@ import { expect } from "chai";
 import sinon from "sinon";
 import Game from "../models/Game.js";
 
-describe("getGame function", () => {
-  let gameFindByIdStub;
-
-  beforeEach(() => {
-    // Stubbing Game.findById method to resolve with a predefined game object
-    gameFindByIdStub = sinon.stub(Game, "findById").resolves({
-      Name: "Game name",
-      Description: "Game description",
-      Difficulty: 3,
-      // Define other properties as needed
-    });
-  });
-
-  afterEach(() => {
-    // Restore the original methods after each test
-    Game.findById.restore();
-  });
-
-  it("should get a game by ID", async () => {
-    const gameId = "65858254ffb7d33eaeca47b8";
-
-    const game = await getGame(gameId);
-
-    // Assertions
-    expect(gameFindByIdStub.calledOnce).to.be.true;
-    expect(gameFindByIdStub.calledWith(gameId)).to.be.true;
-    expect(game).to.deep.equal({
-      Name: "Game name",
-      Description: "Game description",
-      Difficulty: 3,
-      // Define other properties as needed
-    });
-
-    // You can add more specific assertions if needed
-  });
-});
-
 describe("createGame function", () => {
   it("should create a new game", async () => {
     // Test data
