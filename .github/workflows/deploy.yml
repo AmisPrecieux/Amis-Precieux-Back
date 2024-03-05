@@ -18,6 +18,7 @@ jobs:
       run: |
         touch .env
         echo JWT=${{ secrets.JWT }} >> .env
+        echo URI=${{ secrets.URI }} >> .env
 
     - name: Copy file via ssh
       uses: appleboy/scp-action@v0.1.4
