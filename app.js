@@ -52,16 +52,17 @@ app.use("/api/game/", gameRouter);
 app.use("/api/part/", partRouter);
 app.use("/api/auth/", authRouter);
 
-const uri = `mongodb://mongo`;
-console.log(uri);
-// const connection = mongoose.connect(uri, connectionParams).then(() => console.log('connected')).catch((err) => console.log(err));
 mongoose
-  .connect(uri)
+  .connect(process.env.URI)
   .then(() => {
-    console.log("Connecté à MongoDB");
+    if (process.env.NODE_ENV === "development") {
+      console.log("Connecté à MongoDB");
+    }
   })
   .catch((error) => {
-    console.error(error);
+    if (process.env.NODE_ENV === "development") {
+      console.error(error);
+    }
   });
 
 if (process.env.NODE_ENV === "development") {
@@ -78,5 +79,7 @@ app.use((req, res, next) => {
 });
 
 app.listen(port, () => {
-  console.log(`App in port: ${port}`);
+  if (process.env.NODE_ENV === "development") {
+    console.log(`App in port: ${port}`);
+  }
 });
