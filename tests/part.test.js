@@ -1,88 +1,84 @@
-import { createPart, getParts } from "../services/part.js";
-import Part from "../models/Part.js";
+import { createPart, getParts } from "../controllers/partController.js";
 import { expect } from "chai";
 import sinon from "sinon";
+import Part from "../models/Part.js";
 
-describe("createPart function", () => {
-  let partSaveStub;
+describe("Part Controller", () => {
+  let saveStub;
+  let findStub;
+
+  const res = {
+    status: sinon.stub().returnsThis(),
+    json: sinon.stub(),
+  };
 
   beforeEach(() => {
-    // Stubbing Part.save method to resolve with a predefined part object
-    partSaveStub = sinon.stub(Part.prototype, "save").resolves({
-      victory: true,
-      length: 10,
-      NbrMoove: 5,
-      game: "65858254ffb7d33eaeca47b8",
-      // Define other properties as needed
+    saveStub = sinon.stub(Part.prototype, "save");
+    findStub = sinon.stub(Part, "find");
+  });
+
+  afterEach(() => {
+    sinon.restore();
+    res.status.resetHistory();
+    res.json.resetHistory();
+  });
+
+  describe("createPart", () => {
+    const req = {
+      body: {
+        victory: true,
+        length: 10,
+        nbrMoves: 20,
+        idGame: "1234",
+      },
+    };
+
+    it("should return a message if part created successfully", async () => {
+      saveStub.resolves();
+
+      await createPart(req, res);
+
+      expect(res.status.calledOnce).to.be.true;
+      expect(res.status.calledWith(200)).to.be.true;
+      expect(res.json.calledOnce).to.be.true;
+      expect(res.json.calledWith({ message: "Part created successfully" })).to
+        .be.true;
+    });
+
+    it("should return an error message if part not created", async () => {
+      saveStub.rejects(new Error("Part not created"));
+
+      await createPart(req, res);
+
+      expect(res.status.calledOnce).to.be.true;
+      expect(res.status.calledWith(400)).to.be.true;
+      expect(res.json.calledOnce).to.be.true;
+      expect(res.json.calledWith({ message: "Part not created" })).to.be.true;
     });
   });
 
-  afterEach(() => {
-    // Restore the original methods after each test
-    Part.prototype.save.restore();
-  });
+  describe("getParts", () => {
+    it("should return the list of parts", async () => {
+      const parts = [
+        {
+          _id: "1234",
+          victory: true,
+          length: 10,
+          nbrMoves: 20,
+          idGame: "1234",
+        },
+      ];
 
-  it("should create a new part", async () => {
-    // Test data
-    const victory = true;
-    const length = 10;
-    const NbrMoove = 5;
-    const idGame = "65858254ffb7d33eaeca47b8";
+      const req = {};
 
-    await createPart(victory, length, NbrMoove, idGame);
+      findStub.returns(parts);
 
-    // Assertions
-    expect(partSaveStub.calledOnce).to.be.true;
-    expect(
-      partSaveStub.calledWith({
-        victory: victory,
-        length: length,
-        NbrMoove: NbrMoove,
-        game: idGame,
-        // Define other properties as needed
-      })
-    ).to.be.true;
+      await getParts(req, res);
 
-    // You can add more specific assertions if needed
-  });
-});
-
-describe("getParts function", () => {
-  let partFindStub;
-
-  beforeEach(() => {
-    // Stubbing Part.find method to resolve with a predefined part object
-    partFindStub = sinon.stub(Part, "find").resolves([
-      {
-        victory: true,
-        length: 10,
-        NbrMoove: 5,
-        game: "65858254ffb7d33eaeca47b8",
-        // Define other properties as needed
-      },
-    ]);
-  });
-
-  afterEach(() => {
-    // Restore the original methods after each test
-    Part.find.restore();
-  });
-
-  it("should get all parts", async () => {
-    const parts = await getParts();
-
-    // Assertions
-    expect(partFindStub.calledOnce).to.be.true;
-    expect(parts).to.deep.equal([
-      {
-        victory: true,
-        length: 10,
-        NbrMoove: 5,
-        game: "65858254ffb7d33eaeca47b8",
-        // Define other properties as needed
-      },
-    ]);
-
-    // You can add more specific assertions if needed
+      expect(res.status.calledOnce).to.be.true;
+      expect(res.status.calledWith(200)).to.be.true;
+      expect(res.json.calledOnce).to.be.true;
+      expect(res.json.calledWith(parts)).to.be.true;
+    });
   });
 });

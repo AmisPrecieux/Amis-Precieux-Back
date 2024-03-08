@@ -38,3 +38,9 @@ jobs:
         key: ${{ secrets.KEY }}
         port: 22
         script: sudo docker compose -f api/docker-compose-prod.yml up --build -d
+
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v4.0.1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        slug: AmisPrecieux/Amis-Precieux-Back

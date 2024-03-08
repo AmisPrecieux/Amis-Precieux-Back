@@ -1,7 +1,8 @@
 import Game from "../models/Game.js";
 
 export const createGameService = async (game) => {
-  const newGame = new Game({
+console.log ('game', game)
+    const newGame = new Game({
     name: game.name,
     description: game.description,
     difficulty: game.difficulty,
@@ -12,7 +13,7 @@ export const createGameService = async (game) => {
     image3: "",
     image4: "",
     image5: "",
-    instructions: game.instructions,
+    instructions: game.instructions || "",
   });
   await newGame.save();
 };

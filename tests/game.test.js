@@ -1,197 +1,180 @@
+import { expect } from "chai";
+import sinon from "sinon";
 import {
   createGame,
   getGame,
   getAllGames,
   deleteGame,
   updateGame,
-} from "../services/game.js";
-import { expect } from "chai";
-import sinon from "sinon";
+} from "../controllers/gameController.js";
 import Game from "../models/Game.js";
 
-describe("createGame function", () => {
-  it("should create a new game", async () => {
-    // Test data
-    const name = "Game name";
-    const description = "Game description";
-    const difficulty = 3;
-    const slug = "game-slug";
+describe("Game Controller", () => {
+  let saveStub;
+  let findByIdStub;
+  let findStub;
+  let findByIdAndDeleteStub;
+  let findByIdAndUpdateStub;
 
-    // Stubbing Game.create method to resolve with a predefined game object
-    const gameCreateStub = sinon.stub(Game, "create").resolves({
-      Name: name,
-      Description: description,
-      Difficulty: difficulty,
-      Slug: slug,
-      // Define other properties as needed
-    });
+  const res = {
+    status: sinon.stub().returnsThis(),
+    json: sinon.stub(),
+  };
 
-    const createdGame = await createGame(name, description, difficulty, slug);
-
-    // Assertions
-    expect(gameCreateStub.calledOnce).to.be.true;
-    expect(
-      gameCreateStub.calledWith({
-        Name: name,
-        Description: description,
-        Difficulty: difficulty,
-        Slug: slug,
-      })
-    ).to.be.true;
-    expect(createdGame).to.deep.equal({
-      Name: name,
-      Description: description,
-      Difficulty: difficulty,
-      Slug: slug,
-      // Define other properties as needed
-    });
-
-    // Restore the original methods
-    gameCreateStub.restore();
+  beforeEach(() => {
+    saveStub = sinon.stub(Game.prototype, "save");
+    findByIdStub = sinon.stub(Game, "findById");
+    findStub = sinon.stub(Game, "find");
+    findByIdAndDeleteStub = sinon.stub(Game, "findByIdAndDelete");
+    findByIdAndUpdateStub = sinon.stub(Game, "findByIdAndUpdate");
   });
-});
 
-describe("getGame function", () => {
-  it("should get a game by ID", async () => {
-    // Test data
-    const gameId = "65858254ffb7d33eaeca47b8";
-
-    // Stubbing Game.findById method to resolve with a predefined game object
-    const gameFindByIdStub = sinon.stub(Game, "findById").resolves({
-      Name: "Game name",
-      Description: "Game description",
-      Difficulty: 3,
-      // Define other properties as needed
-    });
-
-    const game = await getGame(gameId);
-
-    // Assertions
-    expect(gameFindByIdStub.calledOnce).to.be.true;
-    expect(gameFindByIdStub.calledWith(gameId)).to.be.true;
-    expect(game).to.deep.equal({
-      Name: "Game name",
-      Description: "Game description",
-      Difficulty: 3,
-      // Define other properties as needed
-    });
-
-    // Restore the original methods
-    gameFindByIdStub.restore();
+  afterEach(() => {
+    sinon.restore();
+    res.status.resetHistory();
+    res.json.resetHistory();
   });
-});
 
-describe("getAllGames function", () => {
-  it("should get all games", async () => {
-    // Test data
-    const games = [
-      {
-        Name: "Game 1",
-        Description: "Game 1 description",
-        Difficulty: 1,
-        // Define other properties as needed
+  describe("createGame", () => {
+
+    it("should return a message if game created successfully", async () => {
+      const req = {
+        body: {
+          name: "Game",
+          description: "Description",
+          difficulty: 3,
+          slug: "game",
+          instructions: "instructions",
+        },
+      };
+
+      saveStub.resolves();
+
+      await createGame(req, res);
+
+      expect(res.status.calledOnce).to.be.true;
+      expect(res.status.calledWith(200)).to.be.true;
+      expect(res.json.calledOnce).to.be.true;
+      expect(res.json.calledWith({ message: "Game created successfully" })).to
+        .be.true;
+    });
+
+    it("should return an error message if game not created", async () => {
+      const req = {
+        body: {
+        },
+      };
+
+      saveStub.rejects(new Error("Missing parameters"));
+
+      await createGame(req, res);
+
+      expect(res.status.calledOnce).to.be.true;
+      expect(res.status.calledWith(400)).to.be.true;
+      expect(res.json.calledOnce).to.be.true;
+      expect(res.json.calledWith({ message: "Missing parameters" })).to.be.true;
+    });
+  });
+
+  describe("getGame", () => {
+      const req = {
+        params: {
+          id: "1234",
+        },
+      };
+
+      it("should return a game if found", async () => {
+        findByIdStub.resolves({ name: "Game" });
+        await getGame(req, res);
+
+        expect(res.status.calledOnce).to.be.true;
+        expect(res.status.calledWith(200)).to.be.true;
+        expect(res.json.calledOnce).to.be.true;
+      });
+
+      it("should return an error message if game not found", async () => {
+        findByIdStub.resolves(null);
+        await getGame(req, res);
+
+        console.log(res.status.args[0][0]);
+        console.log(res.json.args[0][0]);
+
+        expect(res.status.calledOnce).to.be.true;
+        expect(res.status.calledWith(400)).to.be.true;
+        expect(res.json.calledOnce).to.be.true;
+      });
+  });
+
+  describe("getAllGames", () => {
+    it("should return all games if found", async () => {
+      const req = {};
+      Game.find.resolves([{ name: "Game" }]);
+      await getAllGames(req, res);
+
+      expect(res.status.calledOnce).to.be.true;
+      expect(res.status.calledWith(200)).to.be.true;
+      expect(res.json.calledOnce).to.be.true;
+    });
+  });
+
+  describe("deleteGame", () => {
+    const req = {
+      params: {
+        id: "1234",
       },
-      {
-        Name: "Game 2",
-        Description: "Game 2 description",
-        Difficulty: 2,
-        // Define other properties as needed
-      },
-    ];
+    };
 
-    // Stubbing Game.find method to resolve with the predefined games array
-    const gameFindStub = sinon.stub(Game, "find").resolves(games);
+    it("should return a message if game deleted successfully", async () => {
+      findByIdAndDeleteStub.resolves();
+      await deleteGame(req, res);
 
-    const allGames = await getAllGames();
+      expect(res.status.calledOnce).to.be.true;
+      expect(res.status.calledWith(200)).to.be.true;
+      expect(res.json.calledOnce).to.be.true;
+    });
 
-    // Assertions
-    expect(gameFindStub.calledOnce).to.be.true;
-    expect(allGames).to.deep.equal(games);
+    it("should return an error message if game not deleted", async () => {
+      findByIdAndDeleteStub.rejects(new Error("Error"));
+      await deleteGame(req, res);
 
-    // Restore the original methods
-    gameFindStub.restore();
+      expect(res.status.calledOnce).to.be.true;
+      expect(res.status.calledWith(400)).to.be.true;
+      expect(res.json.calledOnce).to.be.true;
+    });
+
   });
+
+  describe("updateGame", () => {
+    const req = {
+      params: {
+        id: "1234",
+      },
+      body: {
+        name: "Game",
+        description: "Description",
+        difficulty: 3,
+        slug: "game",
+        instructions: "instructions",
+      },
+    };
+
+    it("should return a message if game updated successfully", async () => {
+      findByIdAndUpdateStub.resolves();
+      await updateGame(req, res);
+
+      expect(res.status.calledOnce).to.be.true;
+      expect(res.status.calledWith(200)).to.be.true;
+      expect(res.json.calledOnce).to.be.true;
+    });
+
+    it("should return an error message if game not updated", async () => {
+      findByIdAndUpdateStub.rejects(new Error("Error"));
+      await updateGame(req, res);
+
+      expect(res.status.calledOnce).to.be.true;
+      expect(res.status.calledWith(400)).to.be.true;
+      expect(res.json.calledOnce).to.be.true;
+    });
+  });
+
 });
-
-// describe("deleteGame function", () => {
-//   it("should delete a game by ID", async () => {
-//     // Test data
-//     const gameId = "gameId123";
-
-//     // Stubbing Game.findByIdAndDelete method to resolve with a predefined game object
-//     const gameFindByIdAndDeleteStub = sinon
-//       .stub(Game, "findByIdAndDelete")
-//       .resolves({
-//         Name: "Game name",
-//         Description: "Game description",
-//         Difficulty: 3,
-//         // Define other properties as needed
-//       });
-
-//     const deletedGame = await deleteGame(gameId);
-
-//     // Assertions
-//     expect(gameFindByIdAndDeleteStub.calledOnce).to.be.true;
-//     expect(gameFindByIdAndDeleteStub.calledWith(gameId)).to.be.true;
-//     expect(deletedGame).to.deep.equal({
-//       Name: "Game name",
-//       Description: "Game description",
-//       Difficulty: 3,
-//       // Define other properties as needed
-//     });
-
-//     // Restore the original methods
-//     gameFindByIdAndDeleteStub.restore();
-//   });
-// });
-
-// describe("updateGame function", () => {
-//   it("should update a game by ID", async () => {
-//     // Test data
-//     const gameId = "gameId123";
-//     const name = "Updated game name";
-//     const description = "Updated game description";
-//     const difficulty = 4;
-//     const slug = "updated-game-slug";
-
-//     // Stubbing Game.findByIdAndUpdate method to resolve with a predefined game object
-//     const gameFindByIdAndUpdateStub = sinon
-//       .stub(Game, "findByIdAndUpdate")
-//       .resolves({
-//         Name: name,
-//         Description: description,
-//         Difficulty: difficulty,
-//         Slug: slug,
-//         // Define other properties as needed
-//       });
-
-//     const updatedGame = await updateGame(
-//       gameId,
-//       name,
-//       description,
-//       difficulty,
-//       slug
-//     );
-
-//     // Assertions
-//     expect(gameFindByIdAndUpdateStub.calledOnce).to.be.true;
-//     expect(
-//       gameFindByIdAndUpdateStub.calledWith(gameId, {
-//         Name: name,
-//         Description: description,
-//         Difficulty: difficulty,
-//         Slug: slug,
-//       })
-//     ).to.be.true;
-//     expect(updatedGame).to.deep.equal({
-//       Name: name,
-//       Description: description,
-//       Difficulty: difficulty,
-//       Slug: slug,
-//       // Define other properties as needed
-//     });
-
-//     // Restore the original methods
-//     gameFindByIdAndUpdateStub.restore();
-//   });
-// });
