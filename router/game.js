@@ -1,15 +1,8 @@
 import { Router } from "express";
-import { createGame, getGame, getAllGames, deleteGame, updateGame } from "../services/game.js";
-import multer from "multer";
 import verifyToken from "../middleware/verifyToken.js";
+import { createGame, getGame, getAllGames, updateGame, deleteGame } from "../controllers/gameController.js";
 
 const router = Router();
-
-const storage = multer.memoryStorage();
-
-const upload = multer({ storage: storage });
-
-
 
 /**
  * @swagger
@@ -35,52 +28,40 @@ const upload = multer({ storage: storage });
  *           schema:
  *             type: object
  *             properties:
- *               Name:
+ *               name:
  *                 type: string
- *               Description:
+ *               description:
  *                 type: string
- *               Difficulty:
+ *               difficulty:
  *                 type: Number
- *               Slug:
+ *               slug:
  *                 type: string
  *                 required:
+ *               image1:
+ *                 type: string
+ *               image2:
+ *                 type: string
+ *               image3:
+ *                 type: string
+ *               image4:
+ *                 type: string
+ *               image5:
+ *                 type: string
+ *               instructions:
+ *                 type: string
  *             example:
- *               Name: My Game
- *               Description: This is a game
- *               Difficulty: 3
- *               Slug: my-game
+ *               name: My Game
+ *               description: This is a game
+ *               difficulty: 3
+ *               slug: my-game
+ *               image1: images/Baleine_Puzzle3.jpg
  *     responses:
  *       200:
  *         description: Game created successfully
  *       400:
  *         description: Error occurred while creating the game
  */
-router.post("/", verifyToken, async (req, res) => {
-  try {
-    await createGame(req.body.Name, req.body.Description, req.body.Difficulty, req.body.Slug);
-    res.send("Jeux ajouté");
-  } catch (error) {
-    res.status(400).send(error);
-  }
-});
-
-router.put("/update/:id", verifyToken, async (req, res) => {
-  try {
-    const gameId = req.params.id;
-    const game = await getGame(gameId);
-    if (!game) {
-      return res.status(404).send("Game not foundaaaa");
-    }
-    await updateGame(gameId, req.body.Name, req.body.Description, req.body.Difficulty,  req.body.image1,  req.body.image2, req.body.image3, req.body.image4, req.body.image5,req.body.Slug);
-    res.send("Game updated successfully");
-  } catch (error) {
-    res.status(400).send(error);
-    console.log(error);
-  }});
-
-
-
-
+router.post("/", verifyToken, createGame);
 
 /**
  * @swagger
@@ -103,15 +84,7 @@ router.put("/update/:id", verifyToken, async (req, res) => {
  *       400:
  *         description: Error occurred while getting the game
  */
-//Get a game
-router.get("/:id", async (req, res) => {
-  try {
-    const game = await getGame(req.params.id);
-    res.send(game);
-  } catch (error) {
-    res.status(400).send(error);
-  }
-});
+router.get("/:id", getGame);
 
 /**
  * @swagger
@@ -127,29 +100,62 @@ router.get("/:id", async (req, res) => {
  *       400:
  *         description: Error occurred while getting the games
  */
-router.get("/", async (req, res) => {
-  try {
-    const games = await getAllGames();
-    res.send(games);
-  } catch (error) {
-    res.status(400).send(error);
-  }
-});
-router.get("/image/:id", async (req, res) => {
-  try {
-    const gameId = req.params.id;
-    const game = await getGame(gameId);
-    if (!game) {
-      return res.status(404).send("Game not found");
-    }
-    console.log(req.params.id);
-    const images = await getGameImages(req.params.id);
-    console.log(images);
-    res.send(`<img src="${images[0].src}" alt="Game Image">`);
-  } catch (error) {
-    res.status(400).send(error);
-  }
-});
+router.get("/", getAllGames);
+
+/**
+ * @swagger
+ * /api/game/{id}:
+ *   put:
+ *     summary: Update a game by ID
+ *     tags: [Game]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the game
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               difficulty:
+ *                 type: Number
+ *               slug:
+ *                 type: string
+ *               image1:
+ *                type: string
+ *               image2:
+ *                type: string
+ *               image3:
+ *                type: string
+ *               image4:
+ *                type: string
+ *               image5:
+ *                type: string
+ *               instructions:
+ *                type: string
+ *             example:
+ *               name: Updated Game
+ *               description: This is an updated game
+ *               difficulty: 4
+ *               slug: updated-game
+ *     responses:
+ *       200:
+ *         description: Game updated successfully
+ *       400:
+ *         description: Error occurred while updating the game
+ */
+router.put("/:id", verifyToken, updateGame);
 
 /**
  * @swagger
@@ -172,14 +178,6 @@ router.get("/image/:id", async (req, res) => {
  *       400:
  *         description: Error occurred while deleting the game
  */
-router.delete("/:id", verifyToken, async (req, res) => {
-  try {
-    const gameId = req.params.id;
-    await deleteGame(gameId);
-    res.send("Game deleted successfully");
-  } catch (error) {
-    res.status(400).send(error);
-  }
-});
+router.delete("/:id", verifyToken, deleteGame);
 
 export default router;

@@ -2,7 +2,7 @@ import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-export async function setUser(userBody) {
+export const setUserService = async (userBody) => {
   const salt = await bcrypt.genSalt(parseInt(process.env.SALT));
   userBody.password = await bcrypt.hash(userBody.password, salt);
   userBody.date = new Date();
@@ -12,7 +12,7 @@ export async function setUser(userBody) {
   await newUser.save();
 }
 
-export async function getUser(userBody) {
+export const getUserService = async (userBody) => {
   const user = await User.findOne({
     mail: userBody.mail,
   });
@@ -39,7 +39,6 @@ export async function getUser(userBody) {
   };
 }
 
-export async function deleteUser(userId) {
+export const deleteUserService = async (userId) => {
   await User.findByIdAndDelete(userId);
 }
-

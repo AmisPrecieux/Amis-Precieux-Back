@@ -1,25 +1,15 @@
-import Part from '../models/Part.js';
+import Part from "../models/Part.js";
 
-export async function createPart(victory, length, NbrMoove, idGame) {
+export const createPartService = async (data) => {
     const newPart = new Part({
-        victory: victory,
-        length: length,
-        NbrMoove: NbrMoove,
-        game: idGame,
-        date: new Date()
+        victory: data.victory,
+        length: data.length,
+        nbrMoves: data.nbrMoves,
+        game: data.idGame,
     });
-    console.log(newPart);
-
     await newPart.save();
-}
+    };
 
-export async function getParts() {
-    const parts = await Part.find();
-    return parts;
-}
-
-
-
-
-
-
+export const getPartsService = async () => {
+    return await Part.find();
+};

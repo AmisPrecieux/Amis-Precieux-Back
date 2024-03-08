@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createPart } from "../services/part.js";
+import { createPart, getParts } from "../controllers/partController.js";
 import verifyToken from "../middleware/verifyToken.js";
 
 
@@ -33,9 +33,9 @@ const router = Router();
  *                 type: boolean
  *               length:
  *                 type: number
- *               NbrMoove:
+ *               nbrMoves:
  *                 type: number
- *               IdGame:
+ *               idGame:
  *                 type: string
  *     responses:
  *       200:
@@ -44,14 +44,7 @@ const router = Router();
  *         description: Error occurred while adding part
  */
 
-router.post("/", async (req, res) => {
-  try {
-      await createPart(req.body.victory, req.body.length, req.body.NbrMoove, req.body.IdGame);
-      res.send("Partie ajouté");
-    } catch (error) {
-      res.status(400).send(error);
-    }
-});
+router.post("/", createPart);
 
 /**
  * @swagger
@@ -68,13 +61,6 @@ router.post("/", async (req, res) => {
  *         description: Error occurred while retrieving parts
  */
 
-router.get("/", verifyToken, async (req, res) => {
-  try {
-    const parts = await getParts();
-    res.send(parts);
-  } catch (error) {
-    res.status(400).send(error);
-  }
-});
+router.get("/", verifyToken, getParts);
 
 export default router;

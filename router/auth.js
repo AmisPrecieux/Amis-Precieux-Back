@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getUser, setUser, deleteUser } from "../services/auth.js";
+import { signIn, signUp, deleteUser } from "../controllers/authController.js";
 import verifyToken from "../middleware/verifyToken.js";
 
 const authRouter = Router();
@@ -37,18 +37,7 @@ const authRouter = Router();
  *       403:
  *         description: Forbidden - error occurred while creating the account
  */
-authRouter.post("/signup", async (req, res) => {
-  if (!req.body.mail || !req.body.password) {
-    return res.status(400).send("Vous devez renseigner le nom et le mot de passe");
-  }
-
-  try {
-    await setUser(req.body);
-    return res.status(201).send("Compte créé");
-  } catch (error) {
-    return res.status(403).send(error.toString());
-  }
-});
+authRouter.post("/signup", signUp);
 
 /**
  * @swagger
@@ -74,14 +63,7 @@ authRouter.post("/signup", async (req, res) => {
  *       403:
  *         description: Forbidden - error occurred while signing in
  */
-authRouter.post("/signin", async (req, res) => {
-  try {
-    const token = await getUser(req.body);
-    return res.status(201).send(token);
-  } catch (error) {
-    return res.status(403).send(error.toString());
-  }
-});
+authRouter.post("/signin", signIn);
 
 /**
  * @swagger
@@ -105,13 +87,6 @@ authRouter.post("/signin", async (req, res) => {
  *       403:
  *         description: Forbidden - error occurred while deleting the account
  */
-authRouter.delete("/delete", verifyToken, async (req, res) => {
-  try {
-    await deleteUser(req.body.id);
-    return res.status(200).send("Compte supprimé");
-  } catch (error) {
-    return res.status(403).send(error.toString());
-  }
-});
+authRouter.delete("/delete", verifyToken, deleteUser);
 
 export default authRouter;
