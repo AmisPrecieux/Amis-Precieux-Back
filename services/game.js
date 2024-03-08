@@ -26,7 +26,6 @@ export const getAllGamesService = async () => {
 };
 
 export const deleteGameService = async (idGame) => {
-  console.log(typeof idGame);
   await Game.findByIdAndDelete(idGame);
 };
 
