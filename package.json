@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "mocha --recursive ./tests --exit",
+    "coverage": "nyc npm test",
     "start": "node app.js",
     "dev": "nodemon app.js"
   },
@@ -35,7 +36,10 @@
   },
   "devDependencies": {
     "chai": "^5.1.0",
-    "mocha": "^10.3.0",
+    "codecov": "^3.8.3",
+    "lcov": "^1.16.0",
+    "mocha": "^10.4.0",
+    "nyc": "^15.1.0",
     "sinon": "^7.5.0",
     "sinon-mongoose": "^2.3.0",
     "supertest": "^6.3.4"
