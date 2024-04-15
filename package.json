@@ -43,5 +43,14 @@
     "sinon": "^7.5.0",
     "sinon-mongoose": "^2.3.0",
     "supertest": "^6.3.4"
+  },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ],
+    "report-dir": "coverage",
+    "temp-dir": ".nyc_output",
+    "all": true
   }
 }
