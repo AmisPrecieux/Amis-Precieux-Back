@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "mocha --recursive ./tests --exit",
-    "coverage": "nyc npm test",
+    "coverage": "nyc --reporter=text mocha",
     "start": "node app.js",
     "dev": "nodemon app.js"
   },
