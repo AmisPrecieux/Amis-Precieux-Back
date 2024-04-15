@@ -1,6 +1,12 @@
 import { Router } from "express";
 import verifyToken from "../middleware/verifyToken.js";
-import { createGame, getGame, getAllGames, updateGame, deleteGame } from "../controllers/gameController.js";
+import {
+  createGame,
+  getGame,
+  getAllGames,
+  updateGame,
+  deleteGame,
+} from "../controllers/gameController.js";
 
 const router = Router();
 
@@ -78,6 +84,8 @@ router.post("/", verifyToken, createGame);
  *         description: ID of the game
  *         schema:
  *           type: string
+ *           minLength: 24
+ *           maxLength: 24
  *     responses:
  *       200:
  *         description: Game found successfully
@@ -117,6 +125,8 @@ router.get("/", getAllGames);
  *         description: ID of the game
  *         schema:
  *           type: string
+ *           minLength: 24
+ *           maxLength: 24
  *     requestBody:
  *       required: true
  *       content:
@@ -172,6 +182,8 @@ router.put("/:id", verifyToken, updateGame);
  *         description: ID of the game
  *         schema:
  *           type: string
+ *           minLength: 24
+ *           maxLength: 24
  *     responses:
  *       200:
  *         description: Game deleted successfully
