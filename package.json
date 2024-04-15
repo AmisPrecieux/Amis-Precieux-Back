@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "mocha --recursive ./test --exit",
-    "coverage": "nyc --reporter=lcov --reporter=text mocha",
+    "coverage": "c8 npm test",
     "start": "node app.js",
     "dev": "nodemon app.js"
   },
@@ -35,20 +35,18 @@
     "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
+    "c8": "^9.1.0",
     "chai": "^5.1.0",
     "codecov": "^3.8.3",
     "lcov": "^1.16.0",
     "mocha": "^10.4.0",
-    "nyc": "^15.1.0",
     "sinon": "^7.5.0",
     "sinon-mongoose": "^2.3.0",
     "supertest": "^6.3.4"
   },
-  "nyc": {
-    
-    "all": true,
-    "include": [
-        "controllers/*"
+  "c8": {
+    "exclude": [
+      "/models/*"
     ]
   }
 }
