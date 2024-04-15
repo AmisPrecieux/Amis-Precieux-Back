@@ -1,17 +1,20 @@
 codecov:
+  owner: AmisPrecieux
+  repo: Amis-Precieux-Back
   notify:
-    require_ci_to_pass: true
+    require_ci_to_pass: yes
   coverage:
     precision: 2
     round: down
     range: "70...100"
-  comment:
-    layout: "header, diff, changes, footer"
-    behavior: default
-  status:
-    project:
-      default:
-        target: auto
-        threshold: 1%
-        base: auto
-        flags: auto
+    status:
+      project:
+        default:
+          target: auto
+          threshold: 1%
+        patch:
+          target: auto
+          threshold: 1%
+        pull_request:
+          target: auto
+          threshold: 1%

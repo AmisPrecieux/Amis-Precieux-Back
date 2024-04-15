@@ -2,6 +2,7 @@
 # Dossiers
 node_modules/
 dist/
+.nyc_output/
 
 # Fichiers
 .env
