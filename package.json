@@ -47,6 +47,10 @@
   "c8": {
     "exclude": [
       "/models/*"
+    ],
+    "reporter": [
+      "lcov",
+      "text-summary"
     ]
   }
 }
